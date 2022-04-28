@@ -1,8 +1,28 @@
 
 from flask import Blueprint, jsonify
 
-books_bp = Blueprint("books", __name__, url_prefix="/books")
-# planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
+class Planet:
+    def __init__(self, name):
+        self.name = name
+
+planets = [
+    Planet("Saturn"),
+    Planet("Earth"),
+    Planet("Mars")
+]
+
+planet_bp = Blueprint("planet", __name__, url_prefix="/planet")
+
+#GET ALL
+@planet_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets_response = []
+    for planet in planets:
+        planets_response.append({
+            "name": planet.name
+        })
+    return jsonify(planets_response)
+
 
 class Book:
     def __init__(self, id, title, description):
@@ -15,6 +35,8 @@ books = [
     Book(2, "Lord of the Flies", "A fictional novel about angry children."),
     Book(3, "Children of the Corn", "A fictional novel about scary corn kids.")
 ] 
+books_bp = Blueprint("books", __name__, url_prefix="/books")
+
 
 @books_bp.route("", methods=["GET"])
 def handle_books():
